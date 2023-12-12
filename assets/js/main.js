@@ -1,23 +1,25 @@
-
-
-const offSet = 0
+const pokemonList = document.getElementById('pokemonList')
+const loadMoreButton = document.getElementById('load-more-button')
+const maxRecords = 151
 const limit = 10
-const url = `https://pokeapi.co/api/v2/pokemon/?offset=${offSet}&limit=${limit}`
+let offSet = 0
+
+
+
 
 
 const convertPokemonLi = (pokemon) => {
     return `
-    <li class="list-pokemons">
-    <span class="number">#001</span>
+    <li class="list-pokemons ${pokemon.type}">
+    <span class="number">#${pokemon.number}</span>
     <span class="name">${pokemon.name}</span>
 
     <div class="detail">
-        <ol class="types">
-            <li class="type">Grass</li>
-            <li class="type">Posion</li>
+        <ol class="types ">
+         ${pokemon.types.map((type)=>`<li class="type ${type}">${type}</li>`).join('')}
 
         </ol>
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
+        <img src="${pokemon.photo}"
             alt="${pokemon.name}">
     </div>
 
@@ -25,14 +27,30 @@ const convertPokemonLi = (pokemon) => {
 
         `
 }
+const loadPokemonItens = (offSet,limit)=>{
+    pokeApi.getPokemons(offSet,limit).then((pokemons) =>{
+        pokemonList.innerHTML +=pokemons.map(convertPokemonLi).join('')
+    })
+} 
+loadPokemonItens(offSet,limit)
 
-const pokemonList = document.getElementById('pokemonList')
+loadMoreButton.addEventListener('click',()=>{
+    offSet +=limit
+    
+    const qtRecordNextPage = offSet + limit
+    if(qtRecordNextPage >= maxRecords){
+        const newList =  maxRecords -offSet
+        loadPokemonItens(offSet,newList)
 
-pokeApi.getPokemons().then((pokemons) => {
-    for (let i = 0; i < pokemons.length; i++) {
-        const pokemon = pokemons[i];
-        pokemonList.innerHTML += convertPokemonLi(pokemon)
+        loadMoreButton.parentElement.removeChild(loadMoreButton)
 
+    }else{
+
+        loadPokemonItens(offSet,limit)
     }
+    
+
 })
+
+
 
