@@ -16,39 +16,46 @@ const convertPokemonLi = (pokemon) => {
 
     <div class="detail">
         <ol class="types ">
-         ${pokemon.types.map((type)=>`<li class="type ${type}">${type}</li>`).join('')}
-
+         ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
+       <li class="type ${pokemon.type}"> Weight : ${pokemon.weight}</li>
+        
+            
         </ol>
         <img src="${pokemon.photo}"
             alt="${pokemon.name}">
+           
+
+            
+            
+        
     </div>
 
 </li>
 
         `
 }
-const loadPokemonItens = (offSet,limit)=>{
-    pokeApi.getPokemons(offSet,limit).then((pokemons) =>{
-        pokemonList.innerHTML +=pokemons.map(convertPokemonLi).join('')
+const loadPokemonItens = (offSet, limit) => {
+    pokeApi.getPokemons(offSet, limit).then((pokemons) => {
+        pokemonList.innerHTML += pokemons.map(convertPokemonLi).join('')
     })
-} 
-loadPokemonItens(offSet,limit)
+}
+loadPokemonItens(offSet, limit)
 
-loadMoreButton.addEventListener('click',()=>{
-    offSet +=limit
-    
+loadMoreButton.addEventListener('click', () => {
+    offSet += limit
+
     const qtRecordNextPage = offSet + limit
-    if(qtRecordNextPage >= maxRecords){
-        const newList =  maxRecords -offSet
-        loadPokemonItens(offSet,newList)
+    if (qtRecordNextPage >= maxRecords) {
+        const newList = maxRecords - offSet
+        loadPokemonItens(offSet, newList)
 
         loadMoreButton.parentElement.removeChild(loadMoreButton)
 
-    }else{
+    } else {
 
-        loadPokemonItens(offSet,limit)
+        loadPokemonItens(offSet, limit)
     }
-    
+
 
 })
 

@@ -6,6 +6,7 @@ const convertPokeApiDetailToPokemon = (pokeDetail) => {
     const pokemon = new Pokemon()
     pokemon.name = pokeDetail.name
     pokemon.number = pokeDetail.id
+    pokemon.weight = pokeDetail.weight
     console.log(pokeDetail)
 
     const types = pokeDetail.types.map((typeSolt) => typeSolt.type.name)
@@ -15,6 +16,8 @@ const convertPokeApiDetailToPokemon = (pokeDetail) => {
     pokemon.types = types
     pokemon.type = type
     pokemon.photo = pokeDetail.sprites.other.dream_world.front_default
+     pokemon.speed = pokeDetail.speed
+     console.log(pokeDetail)
 
     return pokemon
 
@@ -34,5 +37,5 @@ pokeApi.getPokemons = (offSet = 0, limit = 6) => {
         .then((jsonBody) => jsonBody.results)
         .then((pokemons) => pokemons.map(pokeApi.getPokemonDetail))
         .then((detailRequest) => Promise.all(detailRequest))
-        .then((pokemonDetails) => pokemonDetails)
+        .then((pokemonDetails) => pokemonDetails) 
 }
